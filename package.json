@@ -1,0 +1,23 @@
+{
+  "name": "streaming-qoe-validation-framework",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Streaming QoE validation framework using Playwright, Shaka Player, FastAPI and SQLite",
+  "scripts": {
+    "postinstall": "node scripts/copy-shaka.mjs",
+    "test": "playwright test",
+    "test:hls": "playwright test tests/hls-qoe.spec.ts --project=chromium",
+    "test:dash": "playwright test tests/dash-qoe.spec.ts --project=chromium",
+    "test:network": "playwright test tests/network-qoe.spec.ts --project=chromium",
+    "test:headed": "playwright test --project=chromium --headed",
+    "report": "playwright show-report"
+  },
+  "dependencies": {
+    "shaka-player": "5.2.9"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "24.3.1",
+    "typescript": "5.9.2"
+  }
+}

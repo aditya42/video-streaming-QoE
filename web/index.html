@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Streaming QoE Validation</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header>
+    <div>
+      <p class="eyebrow">QUALITY ENGINEERING</p>
+      <h1>Streaming QoE Validation</h1>
+      <p class="subtitle">HLS / DASH playback telemetry, QoE scoring, DRM hooks, and network-condition validation.</p>
+    </div>
+    <div id="engineStatus" class="pill">Player initializing…</div>
+  </header>
+
+  <main>
+    <section class="panel player-panel">
+      <div class="section-title">
+        <div><p class="eyebrow">PLAYBACK TEST</p><h2>Streaming Client</h2></div>
+        <span id="playbackState" class="pill neutral">IDLE</span>
+      </div>
+
+      <div class="controls-grid">
+        <label>Protocol
+          <select id="protocol">
+            <option value="dash">MPEG-DASH</option>
+            <option value="hls">HLS</option>
+          </select>
+        </label>
+        <label>Network profile
+          <select id="networkProfile">
+            <option value="browser-default">Browser default</option>
+            <option value="wifi">Wi-Fi</option>
+            <option value="4g">4G</option>
+            <option value="3g">3G</option>
+            <option value="edge">Edge</option>
+          </select>
+        </label>
+        <label class="wide">Manifest URL
+          <input id="assetUrl" type="url" />
+        </label>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn">Start playback</button>
+        <button id="stopBtn" class="secondary">Stop</button>
+        <button id="saveBtn" class="secondary">Save run</button>
+      </div>
+
+      <video id="video" controls muted playsinline></video>
+
+      <div id="errorBox" class="error-box hidden"></div>
+    </section>
+
+    <section class="metrics-grid" id="metricsGrid"></section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div><p class="eyebrow">CAPABILITIES</p><h2>Codec / HDR / DRM probe</h2></div>
+      </div>
+      <div id="capabilityGrid" class="capability-grid"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title">
+        <div><p class="eyebrow">ANALYTICS</p><h2>Recent QoE runs</h2></div>
+        <button id="refreshBtn" class="secondary small">Refresh</button>
+      </div>
+      <div id="summaryGrid" class="metrics-grid summary"></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Time</th><th>Protocol</th><th>Network</th><th>Startup</th><th>TTFF</th><th>Rebuffer</th><th>Score</th><th>Status</th></tr></thead>
+          <tbody id="runsTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/vendor/shaka-player.compiled.js"></script>
+  <script src="/static/player.js"></script>
+  <script src="/static/app.js"></script>
+</body>
+</html>

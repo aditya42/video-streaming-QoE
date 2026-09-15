@@ -1,0 +1,49 @@
+name: Streaming QoE CI
+
+on:
+  push:
+    branches: [main, development]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  unit-and-qoe-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install backend dependencies
+        run: pip install -r backend/requirements.txt
+
+      - name: Run analyzer unit tests
+        run: python -m unittest discover -s backend/tests -v
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run HLS and DASH smoke QoE tests
+        env:
+          QOE_TEST_DURATION_MS: '8000'
+          QOE_ENFORCE_THRESHOLDS: 'false'
+        run: npx playwright test tests/hls-qoe.spec.ts tests/dash-qoe.spec.ts --project=chromium
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qoe-playwright-report
+          path: |
+            playwright-report
+            test-results
+          if-no-files-found: ignore
